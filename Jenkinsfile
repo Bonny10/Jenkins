@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+    parameters {
+	string(name: 'Jenkins simple projects', defaultValue:'', description:'')
+	booleanParam(name: 'Jenkins_Build', defaultValue: true, description: 'Run this project when true')
+	choice(name: 'VERSION', choices: ['v1.0.0' , 'v1.1.0', v1.2.0']
+    }
     stages {
         stage('Build') {
             steps {
@@ -8,6 +12,11 @@ pipeline {
             }
         }
         stage('Test'){
+            when{
+                expression{
+                    param.Jenkins_Build == true
+                }
+            }
             steps{
                 echo 'You are in test stage...'
             }
