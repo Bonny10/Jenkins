@@ -21,7 +21,7 @@ pipeline {
                 echo "Cloning Python repository from Problem branch"
                 git credentialsId: 'git_token_credentials', url: 'https://github.com/Bonny10/Python.git', branch: 'Problem'
                 sh '''
-                    cd Python
+                    cd Problem
                     python --version
                     python Hello_world.py
                 '''
