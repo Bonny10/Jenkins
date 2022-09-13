@@ -1,42 +1,52 @@
 pipeline {
     agent any
+    
     parameters {
-	string(name: 'Jenkins simple projects', defaultValue:'', description:'')
-	booleanParam(name: 'Jenkins_Build', defaultValue: true, description: 'Run this project when true')
-	choice(name: 'VERSION', choices: ['v1.0.0' , 'v1.1.0', v1.2.0']
+	    choice(
+            name: 'VERSION', 
+            choices: ['v1.1' , 'v1.2', 'v1.3'],
+            description: 'Build Version'
+            )
     }
+
+    environment {
+        MESSAGE = 'WELCOME TO JENKINS BUILD'
+        CREDENTIALS_GIT = credentials('git_token_credentials')
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'You are in Build stage...'
+                echo "${MESSAGE}"
+                echo "Cloning Python repository from Problem branch"
+                git credentialsId: 'git_token_credentials', url: 'https://github.com/Bonny10/Python.git', branch: 'Problem'
+                sh "
+                cd Python
+                python --version
+                python Hello_world.py
+                "
             }
         }
-        stage('Test'){
-            when{
-                expression{
-                    param.Jenkins_Build == true
-                }
-            }
-            steps{
-                echo 'You are in test stage...'
+        stage('Test') {
+            steps {
+                echo 'Testing jenkins build version ${VERSION}'
             }
         }
-        stage('Deploy'){
-            steps{
+        stage('Deploy') {
+            steps {
                 echo 'You are in deploy stage...'
             }
         }
     }
     post{
-        always{
+        always {
             echo 'You have successfully run a build in jenkins'
         }
-        success{
+        success {
             echo 'Your build is successfull congratulations'
         }
-        failure{
+        failure {
             echo 'Sorry for fail build'
         }
     }
 }
-
