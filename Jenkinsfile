@@ -20,11 +20,11 @@ pipeline {
                 echo "${MESSAGE}"
                 echo "Cloning Python repository from Problem branch"
                 git credentialsId: 'git_token_credentials', url: 'https://github.com/Bonny10/Python.git', branch: 'Problem'
-                sh "
-                cd Python
-                python --version
-                python Hello_world.py
-                "
+                sh '''
+                    cd Python
+                    python --version
+                    python Hello_world.py
+                '''
             }
         }
         stage('Test') {
